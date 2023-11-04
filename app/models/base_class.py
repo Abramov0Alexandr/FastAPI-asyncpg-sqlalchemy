@@ -1,11 +1,11 @@
-from sqlalchemy import Integer
+from typing import Any
 from sqlalchemy.ext.declarative import declared_attr
-from sqlalchemy.orm import as_declarative, mapped_column, Mapped
+from sqlalchemy.orm import as_declarative
 
 
 @as_declarative()
 class Base:
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    id: Any
     __name__: str
 
     # to generate tablename from classname
