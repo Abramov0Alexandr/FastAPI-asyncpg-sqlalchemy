@@ -11,6 +11,11 @@ python = "^3.9"
 fastapi = {extras = ["all"], version = "^0.104.1"}
 
 
+[tool.poetry.group.db.dependencies]
+sqlalchemy = "^2.0.23"
+asyncpg = "^0.28.0"
+alembic = "^1.12.1"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
