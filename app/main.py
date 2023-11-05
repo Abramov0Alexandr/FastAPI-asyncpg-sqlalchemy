@@ -1,7 +1,12 @@
 from fastapi import FastAPI
+from app.api.user import api_router
 from app.config import project_settings
 from app.database import engine
 from app.models.base_class import Base
+
+
+def include_router(app):
+    app.include_router(api_router)
 
 
 async def create_db_and_tables():
@@ -12,12 +17,13 @@ async def create_db_and_tables():
 def start_application():
     target_app = FastAPI(**project_settings)
     create_db_and_tables()
+    include_router(target_app)
     return target_app
 
 
 app = start_application()
 
 
-@app.get("/")
-def home():
+@app.get("/", tags=["test routes"])
+async def home():
     return {"msg": "Hello FastAPI🚀"}
