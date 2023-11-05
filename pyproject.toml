@@ -16,6 +16,12 @@ sqlalchemy = "^2.0.23"
 asyncpg = "^0.28.0"
 alembic = "^1.12.1"
 
+
+[tool.poetry.group.dev.dependencies]
+pydantic = {extras = ["email"], version = "^2.4.2"}
+ipython = "^8.17.2"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
