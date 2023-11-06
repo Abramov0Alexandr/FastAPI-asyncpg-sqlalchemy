@@ -1,7 +1,7 @@
 # FastAPI-asyncpg-sqlalchemy
 ### ❗ Проект находится на стадии написания и не отображает итогового результата❗ 
 
-## About
+## О проекте
 Проект представляет собой пример интеграции и взаимодействия Pydantic 2.0 в связке с SQLAlchemy ORM и PostgreSQL, 
 подключенной через асинхронную библиотеку взаимодействия с базами данных asyncpg.
 
@@ -62,7 +62,7 @@ http://127.0.0.1:8000/docs/
 
 
 ## Лицензия
-Electronics retail chain_API распространяется по [MIT License](https://opensource.org/licenses/MIT).
+FastAPI-asyncpg-sqlalchemy распространяется по [MIT License](https://opensource.org/licenses/MIT).
 
 ## Контакты
 
