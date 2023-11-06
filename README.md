@@ -1,7 +1,7 @@
 # FastAPI-asyncpg-sqlalchemy
 ### ❗ Проект находится на стадии написания и не отображает итогового результата❗ 
 
-## About
+## О проекте
 Проект представляет собой пример интеграции и взаимодействия Pydantic 2.0 в связке с SQLAlchemy ORM и PostgreSQL, 
 подключенной через асинхронную библиотеку взаимодействия с базами данных asyncpg.
 
@@ -43,10 +43,57 @@
    poetry install
    ```
 
+Создайте .env файл в основной директории проекта, который будет содержать основные настройки 
+для взаимодействия с базой данных. 
+
+   ```bash
+   touch .env
+   ```
+
+Структура проекта:
+
+<pre>
+<code>
+.
+|-- app
+|-- migrations
+|-- .env  ## NEW FILE!
+|-- .env.sample
+|-- .gitignore
+|-- alembic.ini
+|-- LICENSE
+|-- poetry.lock
+|-- pyproject.toml
+|-- README.md
+</code>
+</pre>
+
+Создайте базу данных, которая будет использоваться в проекте:
+
+   ```bash
+   psql -U <database username>
+   create database <title of your database>;
+   ```
+
+Заполните .env файл. Необходимые переменные можно увидеть в .env.sample:
+   ```bash
+   vim .env
+   ```
+
+<pre>
+<code>
+DB_USER="your database username"
+DB_PASSWORD="your database password"
+DB_HOST="default is localhost"
+DB_PORT="default is 5432"
+DB_NAME="title of your database"
+</code>
+</pre>
+
 Примените миграции для базы данных:
 
    ```bash
-   alembic revision upgrade head
+   alembic upgrade head
    ```
 
 Запустите сервер:
@@ -62,7 +109,7 @@ http://127.0.0.1:8000/docs/
 
 
 ## Лицензия
-Electronics retail chain_API распространяется по [MIT License](https://opensource.org/licenses/MIT).
+FastAPI-asyncpg-sqlalchemy распространяется по [MIT License](https://opensource.org/licenses/MIT).
 
 ## Контакты
 
