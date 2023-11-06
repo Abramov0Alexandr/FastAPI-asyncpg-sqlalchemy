@@ -9,6 +9,10 @@ metadata = MetaData()
 
 @as_declarative()
 class Base:
+    """
+    Базовый класс, от которого будут наследоваться остальные классы.
+    """
+
     id: Any
     __name__: str
     metadata = metadata

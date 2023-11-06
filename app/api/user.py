@@ -8,8 +8,15 @@ from app.schemas.user import UserCreate, GetUser
 api_router = APIRouter(prefix="", tags=["users"])
 
 
-@api_router.post("/", response_model=GetUser, status_code=status.HTTP_201_CREATED)
+@api_router.post("/", response_model=GetUser,
+                 status_code=status.HTTP_201_CREATED,
+                 description='Регистрация пользователя')
 async def create_user(user: UserCreate, db: AsyncSession = Depends(get_async_session)):
+    """
+    Контроллер для создания пользователя.
+    При создании проверяется уникальность указанных имени пользователя и электронной почты.
+    """
+
     db_user_email = await get_user_by_email(db, user.email)
     if db_user_email:
         raise HTTPException(
