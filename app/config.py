@@ -4,10 +4,10 @@ from dotenv import load_dotenv
 
 # Settings of project information.
 project_settings = {
-    "title": "Fast API application.\n"
-             "Include itself asyncpg+sqlalchemy",
+    "title": "Fast API application",
     "version": "1.0",
-    "description": "Мое новое тестовое приложение"
+    "description": "Fast API application.\n"
+             "Application include asyncpg+sqlalchemy technologies"
 }
 
 

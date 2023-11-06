@@ -21,9 +21,9 @@ def start_application():
     return target_app
 
 
-app = start_application()
+start_app = start_application()
 
 
-@app.get("/", tags=["test routes"])
+@start_app.get("/", tags=["test routes"])
 async def home():
     return {"msg": "Hello FastAPI🚀"}
