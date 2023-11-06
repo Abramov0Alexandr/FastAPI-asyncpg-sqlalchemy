@@ -43,10 +43,57 @@
    poetry install
    ```
 
+Создайте .env файл в основной директории проекта, который будет содержать основные настройки 
+для взаимодействия с базой данных. 
+
+   ```bash
+   touch .env
+   ```
+
+Структура проекта:
+
+<pre>
+<code>
+.
+|-- app
+|-- migrations
+|-- .env  ## NEW FILE!
+|-- .env.sample
+|-- .gitignore
+|-- alembic.ini
+|-- LICENSE
+|-- poetry.lock
+|-- pyproject.toml
+|-- README.md
+</code>
+</pre>
+
+Создайте базу данных, которая будет использоваться в проекте:
+
+   ```bash
+   psql -U <database username>
+   create database <title of your database>;
+   ```
+
+Заполните .env файл. Необходимые переменные можно увидеть в .env.sample:
+   ```bash
+   vim .env
+   ```
+
+<pre>
+<code>
+DB_USER="your database username"
+DB_PASSWORD="your database password"
+DB_HOST="default is localhost"
+DB_PORT="default is 5432"
+DB_NAME="title of your database"
+</code>
+</pre>
+
 Примените миграции для базы данных:
 
    ```bash
-   alembic revision upgrade head
+   alembic upgrade head
    ```
 
 Запустите сервер:
