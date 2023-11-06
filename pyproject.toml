@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "test-fast-api-project"
+name = "FastAPI-asyncpg-sqlalchemy"
 version = "0.1.0"
 description = "Myself learning of Fast API framework"
 authors = ["Alexandr Abramov <https://github.com/Abramov0Alexandr>"]
