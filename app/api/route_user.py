@@ -5,15 +5,15 @@ from app.repository.user import create_new_user, get_user_by_email, get_user_by_
 from app.schemas.user import UserCreate, GetUser
 
 
-api_router = APIRouter(prefix="", tags=["users"])
+api_router = APIRouter(prefix="/api", tags=["users"])
 
 
-@api_router.post("/", response_model=GetUser,
+@api_router.post("/create_user/", response_model=GetUser,
                  status_code=status.HTTP_201_CREATED,
                  description='Регистрация пользователя')
 async def create_user(user: UserCreate, db: AsyncSession = Depends(get_async_session)):
     """
-    Контроллер для создания пользователя.
+    Маршрут для создания пользователя.
     При создании проверяется уникальность указанных имени пользователя и электронной почты.
     """
 
