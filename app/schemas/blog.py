@@ -29,6 +29,7 @@ class ShowBlog(BaseModel):
     Схема модели Blog, используется при выводе информации о новой публикации после ее создания.
     """
 
+    id: int
     title: str = Field(..., min_length=3, max_length=30)
     slug: Optional[str] = None
     content: Optional[str]
