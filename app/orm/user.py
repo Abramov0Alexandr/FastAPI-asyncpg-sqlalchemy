@@ -45,3 +45,14 @@ async def create_new_user(user: UserCreate, db: AsyncSession):
     created_user = result.scalar()
     await db.commit()
     return created_user
+
+
+async def show_users(async_db: AsyncSession):
+    """
+    Асинхронная функция, представляющая собой ORM запрос.
+    Результатом запроса является список зарегистрированных пользователей
+    """
+
+    query = select(User)
+    user_list = await async_db.execute(query)
+    return user_list.scalars().all()
