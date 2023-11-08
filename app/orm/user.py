@@ -34,9 +34,7 @@ async def create_new_user(user: UserCreate, db: AsyncSession):
     """
 
     query = insert(User).values(
-        username=user.username,
-        email=user.email,
-        password=Hasher.get_password_hash(user.password),
+        **user.model_dump(),
         is_active=True,
         is_superuser=False
     ).returning(User)
