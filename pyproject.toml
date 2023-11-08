@@ -21,6 +21,7 @@ alembic = "^1.12.1"
 pydantic = {extras = ["email"], version = "^2.4.2"}
 ipython = "^8.17.2"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-slugify = "^8.0.1"
 
 [build-system]
 requires = ["poetry-core"]

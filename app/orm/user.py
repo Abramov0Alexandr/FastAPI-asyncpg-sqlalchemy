@@ -2,7 +2,6 @@ from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User
 from app.schemas.user import UserCreate
-from app.service.hashing import Hasher
 
 
 async def get_user_by_email(db: AsyncSession, email: str):
@@ -34,9 +33,7 @@ async def create_new_user(user: UserCreate, db: AsyncSession):
     """
 
     query = insert(User).values(
-        username=user.username,
-        email=user.email,
-        password=Hasher.get_password_hash(user.password),
+        **user.model_dump(),
         is_active=True,
         is_superuser=False
     ).returning(User)
