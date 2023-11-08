@@ -1,7 +1,8 @@
+from typing import List
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_async_session
-from app.repository.user import create_new_user, get_user_by_email, get_user_by_username
+from app.orm.user import create_new_user, get_user_by_email, get_user_by_username, show_users
 from app.schemas.user import UserCreate, GetUser
 
 
@@ -31,3 +32,15 @@ async def create_user(user: UserCreate, db: AsyncSession = Depends(get_async_ses
 
     user = await create_new_user(user=user, db=db)
     return user
+
+
+@api_router.get("/get_users/", response_model=List[GetUser],
+                status_code=status.HTTP_200_OK,
+                description="Список зарегистрированных пользователей")
+async def get_users(db: AsyncSession = Depends(get_async_session)):
+    """
+    Маршрут для получения списка зарегистрированных пользователей.
+    """
+
+    users = await show_users(async_db=db)
+    return users
