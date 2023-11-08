@@ -1,5 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, model_validator, Field
+from slugify import slugify
 from typing_extensions import Optional
 
 
@@ -19,8 +20,7 @@ class BlogCreate(BaseModel):
         """
 
         if 'title' in values:
-            values['slug'] = '-'.join(values['title'].split()).strip().lower()
-
+            values['slug'] = slugify(values['title'])
         return values
 
 
