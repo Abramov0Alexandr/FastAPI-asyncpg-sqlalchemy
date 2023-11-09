@@ -6,7 +6,7 @@ class UserCreate(BaseModel):
     Схема модели User, используется при создании нового пользователя.
     """
 
-    username: str
+    username: str = Field(..., max_length=150)
     email: EmailStr
     password: str = Field(..., min_length=6)
 
