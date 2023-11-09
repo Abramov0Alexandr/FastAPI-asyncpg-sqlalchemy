@@ -20,6 +20,7 @@
 - pydantic
 - ipython
 - passlib
+- python-slugify
 
 ## Установка
 Прежде чем начать использовать Marketplace API, убедитесь, что у вас установлен 
