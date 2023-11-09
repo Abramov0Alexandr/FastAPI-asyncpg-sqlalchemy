@@ -37,3 +37,11 @@ class ShowBlog(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class UpdateBlog(BlogCreate):
+    """
+    Схема модели Blog, используется при редактировании.
+    """
+
+    pass
