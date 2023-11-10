@@ -1,8 +1,9 @@
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 from app.database import get_async_session
+from app.exceptions import UniqueBlogTitleException, BlogInstanceException
 from app.orm import blog as blog_orm
 from app.schemas import ShowBlog, BlogCreate, UpdateBlog
 
@@ -17,12 +18,10 @@ async def create_blog(creation_blog_schema: BlogCreate, db: AsyncSession = Depen
     Маршрут для создания публикации в личном блоге.
     """
 
-    check_blog_title = await blog_orm.get_blog_by_title(creation_blog_schema.title, async_db=db)
+    find_blog_by_title = await blog_orm.get_blog_by_title(creation_blog_schema.title, async_db=db)
 
-    if check_blog_title:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Название для блога '{creation_blog_schema.title}' уже используется")
+    if find_blog_by_title:
+        raise UniqueBlogTitleException
 
     blog = await blog_orm.create_new_blog(blog_schema=creation_blog_schema, async_db=db, author_id=1)
     return blog
@@ -34,8 +33,8 @@ async def get_blog(blog_id: int, db: AsyncSession = Depends(get_async_session)):
     blog = await blog_orm.retrieve_blog(blog_id=blog_id, async_db=db)
 
     if not blog:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail=f"Блога с ID: {blog_id} не существует")
+        raise BlogInstanceException
+
     return blog
 
 
@@ -50,18 +49,15 @@ async def get_list_blog(db: AsyncSession = Depends(get_async_session)):
                 status_code=status.HTTP_200_OK, description="Редактирование блога")
 async def update_blog(blog_id: int, schema: UpdateBlog, db: AsyncSession = Depends(get_async_session)):
 
-    check_blog_title = await blog_orm.get_blog_by_title(schema.title, async_db=db)
+    find_blog_by_title = await blog_orm.get_blog_by_title(schema.title, async_db=db)
 
-    if check_blog_title:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Название для блога '{schema.title}' уже используется")
+    if find_blog_by_title:
+        raise UniqueBlogTitleException
 
     blog = await blog_orm.update_specific_blog(blog_id=blog_id, blog_schema=schema, author_id=1, async_db=db)
 
     if blog is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Блог с ID: {blog_id} не найден")
+        raise BlogInstanceException
 
     return blog
 
