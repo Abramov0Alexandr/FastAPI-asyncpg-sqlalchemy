@@ -21,6 +21,8 @@
 - ipython
 - passlib
 - python-slugify
+- httpx
+- pytest-asyncio
 
 ## Установка
 Прежде чем начать использовать Marketplace API, убедитесь, что у вас установлен 
@@ -73,7 +75,7 @@
 
    ```bash
    psql -U <database username>
-   create database <title of your database>;
+   create database <your database title>;
    ```
 
 Заполните .env файл. Необходимые переменные можно увидеть в .env.sample:
@@ -87,7 +89,7 @@ DB_USER="your database username"
 DB_PASSWORD="your database password"
 DB_HOST="default is localhost"
 DB_PORT="default is 5432"
-DB_NAME="title of your database"
+DB_NAME="your database title"
 </code>
 </pre>
 
