@@ -1,7 +1,6 @@
-from fastapi import HTTPException
 from sqlalchemy import insert, select, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette import status
+from app.exceptions import BlogInstanceException
 from app.models import Blog
 from app.schemas import BlogCreate, UpdateBlog
 
@@ -78,6 +77,6 @@ async def destroy_blog(blog_id: int, author_id: int, async_db: AsyncSession):
     result = await async_db.execute(query.execution_options(synchronize_session="fetch"))
 
     if result.rowcount == 0:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Блог с ID {blog_id} не найден")
+        raise BlogInstanceException
 
     await async_db.commit()
