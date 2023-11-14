@@ -28,3 +28,11 @@ pytest-asyncio = "^0.21.1"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "/", "app",
+]
+
+asyncio_mode="auto"

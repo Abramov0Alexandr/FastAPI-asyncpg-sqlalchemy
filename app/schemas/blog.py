@@ -35,7 +35,7 @@ class ShowBlog(BaseModel):
     content: Optional[str]
     created_at: datetime
 
-    class Config:
+    class ConfigDict:
         from_attributes = True
 
 

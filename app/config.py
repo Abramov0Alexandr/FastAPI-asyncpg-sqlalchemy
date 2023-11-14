@@ -1,6 +1,8 @@
 import os
 from dotenv import load_dotenv
 
+load_dotenv()
+
 
 # Settings of project information.
 project_settings = {
@@ -11,7 +13,6 @@ project_settings = {
 
 
 # Settings for database connection
-load_dotenv()
 
 DB_USER: str = os.getenv("DB_USER")
 DB_PASSWORD: str = os.getenv("DB_PASSWORD")
@@ -19,3 +20,19 @@ DB_HOST: str = os.getenv("DB_HOST")
 DB_PORT: str = os.getenv("DB_PORT", 5432)
 DB_NAME: str = os.getenv("DB_NAME")
 DATABASE_URL: str = f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+
+
+class TestDBSettings:
+    """
+    Класс, содержащий основные настройки для подключения к тестовой базе данных.
+    """
+
+    DB_USER: str = "postgres"
+    DB_PASSWORD: str = os.getenv("DB_PASSWORD")
+    DB_HOST: str = "localhost"
+    DB_PORT: str = "5432"
+    DB_NAME: str = "db_test_api"
+    DATABASE_URL: str = f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+
+
+test_db_settings = TestDBSettings()
