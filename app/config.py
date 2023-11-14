@@ -23,6 +23,10 @@ DATABASE_URL: str = f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB
 
 
 class TestDBSettings:
+    """
+    Класс, содержащий основные настройки для подключения к тестовой базе данных.
+    """
+
     DB_USER: str = "postgres"
     DB_PASSWORD: str = os.getenv("DB_PASSWORD")
     DB_HOST: str = "localhost"

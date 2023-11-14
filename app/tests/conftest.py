@@ -9,13 +9,19 @@ from app.database import get_async_session
 from app.main import app
 from app.models.base_class import metadata, Base
 
+
+# Настройки движка для тестовой базы данных.
 engine_test = create_async_engine(test_db_settings.DATABASE_URL)
 async_session = async_sessionmaker(engine_test, expire_on_commit=False, class_=AsyncSession)
 metadata.bind = engine_test
 
 
 async def override_get_async_session() -> AsyncGenerator[AsyncSession, None]:
-    async with async_sessionmaker() as session:
+    """
+    Функция для изменения зависимости подключения к тестовой базе данных.
+    """
+
+    async with async_session() as session:
         yield session
 
 
@@ -24,6 +30,10 @@ app.dependency_overrides[get_async_session] = override_get_async_session
 
 @pytest.fixture(autouse=True, scope='session')
 async def prepare_database():
+    """
+    Функция, позволяющая создать таблицы перед выполнением тестов и удалить их после завершения.
+    """
+
     async with engine_test.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
@@ -45,5 +55,8 @@ sync_client = TestClient(app)
 
 @pytest.fixture(scope='session')
 async def async_client() -> AsyncGenerator[AsyncClient, None]:
-    async with AsyncClient(app=app(), base_url='http://test') as client:
+    """
+    Асинхронный объект Client, который будет использоваться для обращения к маршрутам.
+    """
+    async with AsyncClient(app=app, base_url='http://test') as client:
         yield client
