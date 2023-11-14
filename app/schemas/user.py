@@ -19,5 +19,5 @@ class GetUser(BaseModel):
     email: EmailStr
     is_active: bool
 
-    class Config:
+    class ConfigDict:
         from_attributes = True

@@ -4,7 +4,7 @@ from app.config import DATABASE_URL
 
 
 engine = create_async_engine(DATABASE_URL)
-async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
+async_session_maker = async_sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
 
 # Адаптер базы данных пользователей FastAPI обеспечивает связь между конфигурацией вашей базы данных и
