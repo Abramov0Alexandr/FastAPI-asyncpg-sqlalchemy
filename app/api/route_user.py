@@ -19,12 +19,12 @@ async def create_user(user: UserCreate, db: AsyncSession = Depends(get_async_ses
     При создании проверяется уникальность указанных имени пользователя и электронной почты.
     """
 
-    db_user_email = await get_user_by_email(db, user.email)
-    if db_user_email:
+    find_user_by_email = await get_user_by_email(db, user.email)
+    if find_user_by_email:
         raise UniqueUserEmailException
 
-    db_user_username = await get_user_by_username(db, user.username)
-    if db_user_username:
+    find_user_by_username = await get_user_by_username(db, user.username)
+    if find_user_by_username:
         raise UniqueUsernameException
 
     user = await create_new_user(user=user, db=db)

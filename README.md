@@ -108,7 +108,7 @@ DB_NAME="your database title"
 ## Тестирование
 Для запуска тестов воспользуйтесь следующей командой:
    ```bash
-   pytest -vv -s app/tests/
+   pytest -vv app/tests/
    ```
 
 ## Документация
