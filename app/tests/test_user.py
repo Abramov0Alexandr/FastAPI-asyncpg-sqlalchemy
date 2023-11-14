@@ -70,6 +70,7 @@ async def test_failed_user_email(async_client: AsyncClient, payload, status_code
             {"username": "test_user1", "password": "123654", "email": "test1@example.com"},
             status.HTTP_200_OK,
             [
+                {'email': 'author@example.com', 'is_active': True},
                 {'email': 'test@example.com', 'is_active': True},
                 {'email': 'test1@example.com', 'is_active': True}
             ]
