@@ -26,7 +26,9 @@ class UniqueUserEmailException(UserException):
     def __init__(self, *message):
         super().__init__(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=message if message else 'Указанная электронная почта уже используется'
+            detail=message
+            if message
+            else "Указанная электронная почта уже используется",
         )
 
 
@@ -38,7 +40,9 @@ class UniqueUsernameException(UserException):
     def __init__(self, *message):
         super().__init__(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=message if message else 'Указанное имя пользователя уже используется'
+            detail=message
+            if message
+            else "Указанное имя пользователя уже используется",
         )
 
 
@@ -50,7 +54,7 @@ class UniqueBlogTitleException(BlogException):
     def __init__(self, *message):
         super().__init__(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=message if message else 'Указанное название блога уже используется'
+            detail=message if message else "Указанное название блога уже используется",
         )
 
 
@@ -62,5 +66,5 @@ class BlogInstanceException(BlogException):
     def __init__(self, *message):
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=message if message else 'Блог с указанным ID не существует'
+            detail=message if message else "Блог с указанным ID не существует",
         )

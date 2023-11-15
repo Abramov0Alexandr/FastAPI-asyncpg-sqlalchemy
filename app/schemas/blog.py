@@ -1,5 +1,8 @@
 from datetime import datetime
-from pydantic import BaseModel, model_validator, Field
+
+from pydantic import BaseModel
+from pydantic import Field
+from pydantic import model_validator
 from slugify import slugify
 from typing_extensions import Optional
 
@@ -13,14 +16,14 @@ class BlogCreate(BaseModel):
     slug: Optional[str] = None
     content: Optional[str] = None
 
-    @model_validator(mode='before')
+    @model_validator(mode="before")
     def generate_slug(cls, values):
         """
         Метод для генерации поля "slug" для модели Blog.
         """
 
-        if 'title' in values:
-            values['slug'] = slugify(values['title'])
+        if "title" in values:
+            values["slug"] = slugify(values["title"])
         return values
 
 
