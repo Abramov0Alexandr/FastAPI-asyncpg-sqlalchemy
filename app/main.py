@@ -1,7 +1,8 @@
 import uvicorn
 from fastapi import FastAPI
-from app.api.route_user import api_router as user_route
+
 from app.api.route_blog import api_router as blog_route
+from app.api.route_user import api_router as user_route
 from app.config import project_settings
 
 

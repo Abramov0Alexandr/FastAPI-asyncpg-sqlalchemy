@@ -1,4 +1,5 @@
 import os
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -8,7 +9,7 @@ load_dotenv()
 project_settings = {
     "title": "Fast API application",
     "version": "1.0",
-    "description": "Fast API application. Application include asyncpg+sqlalchemy technologies"
+    "description": "Fast API application. Application include asyncpg+sqlalchemy technologies",
 }
 
 
@@ -19,7 +20,9 @@ DB_PASSWORD: str = os.getenv("DB_PASSWORD")
 DB_HOST: str = os.getenv("DB_HOST")
 DB_PORT: str = os.getenv("DB_PORT", 5432)
 DB_NAME: str = os.getenv("DB_NAME")
-DATABASE_URL: str = f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+DATABASE_URL: str = (
+    f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+)
 
 
 class TestDBSettings:
@@ -32,7 +35,9 @@ class TestDBSettings:
     DB_HOST: str = "localhost"
     DB_PORT: str = "5432"
     DB_NAME: str = "db_test_api"
-    DATABASE_URL: str = f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    DATABASE_URL: str = (
+        f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    )
 
 
 test_db_settings = TestDBSettings()

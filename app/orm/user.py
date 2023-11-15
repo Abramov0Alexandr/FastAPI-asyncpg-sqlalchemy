@@ -1,8 +1,10 @@
-from sqlalchemy import select, insert
+from sqlalchemy import insert
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models import User
+
+from app.models.user import User
 from app.schemas.user import UserCreate
-from app.service import Hasher
+from app.service.hashing import Hasher
 
 
 async def get_user_by_email(db: AsyncSession, email: str):
@@ -33,12 +35,16 @@ async def create_new_user(user: UserCreate, db: AsyncSession):
     В ходе выполнения функции происходит создание нового пользователя.
     """
 
-    query = insert(User).values(
-        password=Hasher.get_password_hash(user.password),
-        **user.model_dump(exclude={"password"}),
-        is_active=True,
-        is_superuser=False
-    ).returning(User)
+    query = (
+        insert(User)
+        .values(
+            password=Hasher.get_password_hash(user.password),
+            **user.model_dump(exclude={"password"}),
+            is_active=True,
+            is_superuser=False
+        )
+        .returning(User)
+    )
 
     result = await db.execute(query)
     created_user = result.scalar()
