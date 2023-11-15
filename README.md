@@ -11,6 +11,7 @@
 - организация структуры проекта согласно лучшим практикам
 - аутентификацию пользователей (JWT + cookie)
 - написание асинхронных тестов (httpx + pytest-asyncio)
+- соблюдение правил написания (pre-commit-hooks + black + flake8 + reorder-python-imports)
 
 ## Стек технологий:
 - python
@@ -24,6 +25,8 @@
 - python-slugify
 - httpx
 - pytest-asyncio
+- pre-commit
+- black
 
 ## Установка
 Прежде чем начать использовать Marketplace API, убедитесь, что у вас установлен
@@ -64,11 +67,13 @@
 |-- .env  ## NEW FILE!
 |-- .env.sample
 |-- .gitignore
+|-- .pre-commit-config.yaml
 |-- alembic.ini
 |-- LICENSE
 |-- poetry.lock
 |-- pyproject.toml
 |-- README.md
+|-- setup.cfg
 </code>
 </pre>
 
