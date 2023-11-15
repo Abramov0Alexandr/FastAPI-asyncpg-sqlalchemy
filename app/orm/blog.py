@@ -1,8 +1,13 @@
-from sqlalchemy import insert, select, update, delete
+from sqlalchemy import delete
+from sqlalchemy import insert
+from sqlalchemy import select
+from sqlalchemy import update
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.exceptions import BlogInstanceException
-from app.models import Blog
-from app.schemas import BlogCreate, UpdateBlog
+from app.models.blog import Blog
+from app.schemas.blog import BlogCreate
+from app.schemas.blog import UpdateBlog
 
 
 async def get_blog_by_title(blog_title: str, async_db: AsyncSession):
@@ -16,16 +21,19 @@ async def get_blog_by_title(blog_title: str, async_db: AsyncSession):
     return result_blog.scalar()
 
 
-async def create_new_blog(blog_schema: BlogCreate, async_db: AsyncSession, author_id: int):
+async def create_new_blog(
+    blog_schema: BlogCreate, async_db: AsyncSession, author_id: int
+):
     """
     Асинхронная функция, представляющая собой ORM запрос.
     В ходе выполнения функции происходит создание нового блога.
     """
 
-    query = insert(Blog).values(
-        **blog_schema.model_dump(),
-        author_id=author_id
-    ).returning(Blog)
+    query = (
+        insert(Blog)
+        .values(**blog_schema.model_dump(), author_id=author_id)
+        .returning(Blog)
+    )
 
     result = await async_db.execute(query)
     created_blog = result.scalar()
@@ -55,13 +63,20 @@ async def list_blog(async_db: AsyncSession):
     return blog_list.scalars()
 
 
-async def update_specific_blog(blog_id: int, blog_schema: UpdateBlog, author_id: int, async_db: AsyncSession):
+async def update_specific_blog(
+    blog_id: int, blog_schema: UpdateBlog, author_id: int, async_db: AsyncSession
+):
     """
     Асинхронная функция, представляющая собой ORM запрос.
     Функция дл обновления объекта модели Blog.
     """
 
-    query = update(Blog).where(Blog.id == blog_id).values(blog_schema.model_dump(exclude_unset=True)).returning(Blog)
+    query = (
+        update(Blog)
+        .where(Blog.id == blog_id)
+        .values(blog_schema.model_dump(exclude_unset=True))
+        .returning(Blog)
+    )
     result = await async_db.execute(query)
     await async_db.commit()
     return result.scalar()
@@ -74,7 +89,9 @@ async def destroy_blog(blog_id: int, author_id: int, async_db: AsyncSession):
     """
 
     query = delete(Blog).where(Blog.id == blog_id)
-    result = await async_db.execute(query.execution_options(synchronize_session="fetch"))
+    result = await async_db.execute(
+        query.execution_options(synchronize_session="fetch")
+    )
 
     if result.rowcount == 0:
         raise BlogInstanceException
