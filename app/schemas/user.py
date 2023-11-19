@@ -23,3 +23,26 @@ class GetUser(BaseModel):
 
     class ConfigDict:
         from_attributes = True
+
+
+class UserLogin(BaseModel):
+    """
+    Схема для аутентификации пользователя.
+    """
+
+    username: str = Field(title="User’s nickname", description="User’s nickname")
+    password: str = Field(title="User’s password", description="User’s password")
+
+    class ConfigDict:
+        from_attributes = True
+
+
+class TokenResponse(BaseModel):
+    """
+    Схема используется при успешном создании токена.
+    """
+
+    access_token: str = Field(
+        title="User’s access token", description="User’s access token"
+    )
+    token_type: str = Field(title="User’s token type", description="User’s token type")
