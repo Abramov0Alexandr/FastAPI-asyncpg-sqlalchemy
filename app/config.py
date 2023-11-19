@@ -25,6 +25,11 @@ DATABASE_URL: str = (
 )
 
 
+JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY")
+TOKEN_LIFESPAN: int = int(os.getenv("TOKEN_LIFESPAN"))
+VERIFY_SIGNATURE: str = os.getenv("VERIFY_SIGNATURE")
+
+
 class TestDBSettings:
     """
     Класс, содержащий основные настройки для подключения к тестовой базе данных.
