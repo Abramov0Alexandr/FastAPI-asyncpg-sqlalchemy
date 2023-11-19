@@ -32,6 +32,20 @@ class UniqueUserEmailException(UserException):
         )
 
 
+class UserInstanceException(BlogException):
+    """
+    Исключение вызывается в случае, если искомый объект модели User не существует.
+    """
+
+    def __init__(self, *message):
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=message
+            if message
+            else "Пользователь с указанными данными не существует",
+        )
+
+
 class UniqueUsernameException(UserException):
     """
     Исключение вызывается при нарушении уникальности поля username у объектов модели User.
