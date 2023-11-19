@@ -26,7 +26,7 @@ async def get_user_by_username(db: AsyncSession, username: str):
 
     query = select(User).filter(User.username == username)
     result = await db.execute(query)
-    return result.first()
+    return result.scalar()
 
 
 async def create_new_user(user: UserCreate, db: AsyncSession):
