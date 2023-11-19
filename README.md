@@ -97,6 +97,9 @@ DB_PASSWORD="your database password"
 DB_HOST="default is localhost"
 DB_PORT="default is 5432"
 DB_NAME="your database title"
+TOKEN_LIFESPAN="token lifetime in seconds"
+VERIFY_SIGNATURE="set JWT signing algorithm"
+JWT_SECRET_KEY="secret key for JWT encoding"
 </code>
 </pre>
 
