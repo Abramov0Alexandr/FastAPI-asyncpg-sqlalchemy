@@ -27,6 +27,7 @@ pytest-asyncio = "^0.21.1"
 pre-commit = "^3.5.0"
 black = "^23.11.0"
 pytest-cov = "^4.1.0"
+pyjwt = "^2.8.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -36,7 +37,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.pytest.ini_options]
 pythonpath = [
 #    "/", "app",
-    "app/",
+    "app/tests/",
 ]
 
 asyncio_mode="auto"
