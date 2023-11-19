@@ -5,8 +5,8 @@ import jwt
 from fastapi import Depends
 from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordBearer
+from jwt import DecodeError
 from jwt import ExpiredSignatureError
-from jwt import PyJWTError
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -25,14 +25,8 @@ async def create_access_token(user: User):
 
     payload = {"username": user.username, "email": user.email, "exp": token_exp_time}
 
-    try:
-
-        token = jwt.encode(payload, JWT_SECRET_KEY, algorithm=VERIFY_SIGNATURE)
-        return token
-
-    except ExpiredSignatureError:
-        # Обработка ошибки истечения срока действия токена
-        return "Токен истек. Необходима повторная аутентификация."
+    token = jwt.encode(payload, JWT_SECRET_KEY, algorithm=VERIFY_SIGNATURE)
+    return token
 
 
 async def get_current_user(
@@ -46,13 +40,19 @@ async def get_current_user(
     )
     try:
 
-        payload = jwt.decode(token, JWT_SECRET_KEY, algorithm=VERIFY_SIGNATURE)
+        payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[VERIFY_SIGNATURE])
         username = payload.get("username")
 
         if username is None:
             raise credentials_exception
 
-    except PyJWTError:
+    except ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token signature has expired",
+        )
+
+    except DecodeError:
         raise credentials_exception
 
     user = await get_user_by_username(db=db, username=username)
