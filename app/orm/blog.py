@@ -68,7 +68,8 @@ async def update_specific_blog(
 ):
     """
     Асинхронная функция, представляющая собой ORM запрос.
-    Функция дл обновления объекта модели Blog.
+    Функция для обновления объекта модели Blog.
+    Обновить блог может только его создатель.
     """
 
     query = (
@@ -77,7 +78,7 @@ async def update_specific_blog(
         .values(blog_schema.model_dump(exclude_unset=True))
         .returning(Blog)
     )
-    result = await async_db.execute(query)
+    result = await async_db.execute(query.filter(Blog.author_id == author_id))
     await async_db.commit()
     return result.scalar()
 
@@ -90,7 +91,9 @@ async def destroy_blog(blog_id: int, author_id: int, async_db: AsyncSession):
 
     query = delete(Blog).where(Blog.id == blog_id)
     result = await async_db.execute(
-        query.execution_options(synchronize_session="fetch")
+        query.execution_options(synchronize_session="fetch").filter(
+            Blog.author_id == author_id
+        )
     )
 
     if result.rowcount == 0:

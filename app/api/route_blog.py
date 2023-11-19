@@ -8,10 +8,12 @@ from starlette import status
 from app.database import get_async_session
 from app.exceptions import BlogInstanceException
 from app.exceptions import UniqueBlogTitleException
+from app.models.user import User
 from app.orm import blog as blog_orm
 from app.schemas.blog import BlogCreate
 from app.schemas.blog import ShowBlog
 from app.schemas.blog import UpdateBlog
+from app.service.auth import get_current_user
 
 api_router = APIRouter(prefix="/api", tags=["blog"])
 
@@ -23,7 +25,9 @@ api_router = APIRouter(prefix="/api", tags=["blog"])
     description="Создание новой публикации для блога",
 )
 async def create_blog(
-    creation_blog_schema: BlogCreate, db: AsyncSession = Depends(get_async_session)
+    creation_blog_schema: BlogCreate,
+    db: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(get_current_user),
 ):
     """
     Маршрут для создания публикации в личном блоге.
@@ -37,7 +41,7 @@ async def create_blog(
         raise UniqueBlogTitleException
 
     blog = await blog_orm.create_new_blog(
-        blog_schema=creation_blog_schema, async_db=db, author_id=1
+        blog_schema=creation_blog_schema, async_db=db, author_id=current_user.id
     )
     return blog
 
@@ -75,7 +79,10 @@ async def get_list_blog(db: AsyncSession = Depends(get_async_session)):
     description="Редактирование блога",
 )
 async def update_blog(
-    blog_id: int, schema: UpdateBlog, db: AsyncSession = Depends(get_async_session)
+    blog_id: int,
+    schema: UpdateBlog,
+    db: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(get_current_user),
 ):
 
     find_blog_by_title = await blog_orm.get_blog_by_title(schema.title, async_db=db)
@@ -84,7 +91,7 @@ async def update_blog(
         raise UniqueBlogTitleException
 
     blog = await blog_orm.update_specific_blog(
-        blog_id=blog_id, blog_schema=schema, author_id=1, async_db=db
+        blog_id=blog_id, blog_schema=schema, author_id=current_user.id, async_db=db
     )
 
     if blog is None:
@@ -98,8 +105,12 @@ async def update_blog(
     status_code=status.HTTP_200_OK,
     description="Удаление блога",
 )
-async def delete_blog(blog_id: int, db: AsyncSession = Depends(get_async_session)):
-    await blog_orm.destroy_blog(blog_id=blog_id, author_id=1, async_db=db)
+async def delete_blog(
+    blog_id: int,
+    db: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(get_current_user),
+):
+    await blog_orm.destroy_blog(blog_id=blog_id, author_id=current_user.id, async_db=db)
 
     return {
         "status": status.HTTP_200_OK,
