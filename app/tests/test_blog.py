@@ -8,7 +8,7 @@ from app.tests.conftest import async_session
 
 
 @pytest.mark.parametrize(
-    "user_payload, blog_payload, status_code",
+    "user_payload, user_auth, blog_payload, status_code",
     (
         (
             {
@@ -16,39 +16,43 @@ from app.tests.conftest import async_session
                 "password": "123654",
                 "email": "author@example.com",
             },
+            {"username": "test_author", "password": "123654"},
             {"title": "Test title", "content": "Some test content"},
             status.HTTP_201_CREATED,
         ),
     ),
 )
 async def test_create_blog(
-    async_client: AsyncClient, user_payload, blog_payload, status_code
+    async_client: AsyncClient,
+    user_payload,
+    user_auth,
+    blog_payload,
+    status_code,
 ):
     """
     TestCase для проверки маршрута создания объекта модели Blog.
     """
 
-    await async_client.post("/api/create_user/", json=user_payload)
+    # Create new test user
+    new_user = await async_client.post("/api/create_user/", json=user_payload)
+    assert new_user.status_code == status_code
 
-    response = await async_client.post("/api/create_blog/", json=blog_payload)
+    # Create token for new test user
+    get_new_user_token = await async_client.post("/api/token/", json=user_auth)
+    assert get_new_user_token.status_code == status.HTTP_200_OK
+    user_token = get_new_user_token.json()["access_token"]
+
+    # Create new test blog with authentication
+    response = await async_client.post(
+        "/api/create_blog/",
+        json=blog_payload,
+        headers={"Authorization": f"Bearer {user_token}"},
+    )
     assert response.json()["id"] == 1
     assert response.json()["title"] == "Test title"
     assert response.json()["slug"] == "test-title"
     assert response.json()["content"] == "Some test content"
     assert response.status_code == status_code
-
-
-async def test_get_specific_blog(async_client: AsyncClient):
-    """
-    TestCase для проверки получения указанного объекта модели Blog.
-    """
-
-    response = await async_client.get("/api/detail_blog/1/")
-    assert response.json()["id"] == 1
-    assert response.json()["title"] == "Test title"
-    assert response.json()["slug"] == "test-title"
-    assert response.json()["content"] == "Some test content"
-    assert response.status_code == status.HTTP_200_OK
 
 
 @pytest.mark.parametrize(
@@ -94,16 +98,44 @@ async def test_get_list_blog(
     assert list_blog.status_code == status_code
 
 
+async def test_get_specific_blog(async_client: AsyncClient):
+    """
+    TestCase для проверки получения указанного объекта модели Blog.
+    """
+
+    response = await async_client.get("/api/detail_blog/2/")
+    assert response.json()["id"] == 2
+    assert response.json()["title"] == "Blog title"
+    assert response.json()["slug"] == "blog-title"
+    assert response.json()["content"] == "Some test content"
+    assert response.status_code == status.HTTP_200_OK
+
+
 @pytest.mark.parametrize(
-    "update_blog_payload, status_code",
-    (({"title": "Updated title"}, status.HTTP_200_OK),),
+    "user_auth, update_blog_payload, status_code",
+    (
+        (
+            {"username": "test_author", "password": "123654"},
+            {"title": "Updated title"},
+            status.HTTP_200_OK,
+        ),
+    ),
 )
-async def test_list_blog(async_client: AsyncClient, update_blog_payload, status_code):
+async def test_list_blog(
+    async_client: AsyncClient, user_auth, update_blog_payload, status_code
+):
     """
     TestCase для проверки маршрута обновления объекта модели Blog.
     """
 
-    response = await async_client.put("/api/update_blog/1/", json=update_blog_payload)
+    get_user_token = await async_client.post("/api/token/", json=user_auth)
+    user_token = get_user_token.json()["access_token"]
+
+    response = await async_client.put(
+        "/api/update_blog/1/",
+        json=update_blog_payload,
+        headers={"Authorization": f"Bearer {user_token}"},
+    )
 
     assert response.json()["id"] == 1
     assert response.json()["title"] == "Updated title"
