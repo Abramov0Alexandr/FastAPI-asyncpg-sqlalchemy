@@ -47,7 +47,7 @@ async def retrieve_blog(blog_id: int, async_db: AsyncSession):
     В ходе выполнения функции происходит поиск блога по переданному в запросе id.
     """
 
-    query = select(Blog).filter(Blog.id == blog_id)
+    query = select(Blog).filter(Blog.id == blog_id).filter(Blog.is_active)
     specific_blog = await async_db.execute(query)
     return specific_blog.scalar()
 
