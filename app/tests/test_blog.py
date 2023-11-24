@@ -121,7 +121,7 @@ async def test_get_specific_blog(async_client: AsyncClient):
         ),
     ),
 )
-async def test_list_blog(
+async def test_update_blog(
     async_client: AsyncClient, user_auth, update_blog_payload, status_code
 ):
     """
