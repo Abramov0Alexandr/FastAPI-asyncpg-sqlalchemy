@@ -45,6 +45,7 @@ async def retrieve_blog(blog_id: int, async_db: AsyncSession):
     """
     Асинхронная функция, представляющая собой ORM запрос.
     В ходе выполнения функции происходит поиск блога по переданному в запросе id.
+    Результатом запроса могут быть объекты класса Blog только с положительным флагом "is_active".
     """
 
     query = select(Blog).filter(Blog.id == blog_id).filter(Blog.is_active)
@@ -60,7 +61,7 @@ async def list_blog(async_db: AsyncSession):
 
     query = select(Blog).filter(Blog.is_active)
     blog_list = await async_db.execute(query)
-    return blog_list.scalars()
+    return blog_list.scalars().all()
 
 
 async def update_specific_blog(
