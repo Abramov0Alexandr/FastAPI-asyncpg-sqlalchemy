@@ -12,6 +12,7 @@
 - аутентификацию пользователей (JWT + cookie)
 - написание асинхронных тестов (httpx + pytest-asyncio)
 - соблюдение правил написания (pre-commit-hooks + black + flake8 + reorder-python-imports)
+- кеширование маршрутов (fastapi-cache2)
 
 ## Стек технологий:
 - python
@@ -28,6 +29,7 @@
 - pre-commit
 - black
 - pyjwt
+- fastapi-cache2
 
 ## Установка
 Прежде чем начать использовать FastAPI-asyncpg-sqlalchemy, убедитесь, что у вас установлен
