@@ -2,6 +2,7 @@ from typing import List
 
 from fastapi import APIRouter
 from fastapi import Depends
+from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -25,7 +26,7 @@ api_router = APIRouter(prefix="/api", tags=["blog"])
     description="Создание новой публикации для блога",
 )
 async def create_blog(
-    creation_blog_schema: BlogCreate,
+    creation_blog_schema: BlogCreate = Depends(),
     db: AsyncSession = Depends(get_async_session),
     current_user: User = Depends(get_current_user),
 ):
@@ -52,6 +53,7 @@ async def create_blog(
     status_code=status.HTTP_200_OK,
     description="Получение информации о блоге",
 )
+@cache(expire=50, namespace="blog_detail")
 async def get_blog(blog_id: int, db: AsyncSession = Depends(get_async_session)):
     blog = await blog_orm.retrieve_blog(blog_id=blog_id, async_db=db)
 
@@ -67,6 +69,7 @@ async def get_blog(blog_id: int, db: AsyncSession = Depends(get_async_session)):
     status_code=status.HTTP_200_OK,
     description="Получение списка созданных блогов",
 )
+@cache(expire=50, namespace="list_blog")
 async def get_list_blog(db: AsyncSession = Depends(get_async_session)):
     blog_list = await blog_orm.list_blog(async_db=db)
     return blog_list
