@@ -18,7 +18,9 @@ app.include_router(blog_route)
 # https://github.com/long2ice/fastapi-cache#usage
 @app.on_event("startup")
 async def startup():
-    redis = aioredis.from_url("redis://localhost")
+    redis = aioredis.from_url(
+        "redis://localhost", decode_responses=True, encoding="utf8"
+    )
     FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
 
 

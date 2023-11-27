@@ -16,8 +16,6 @@ async_session_maker = async_sessionmaker(
 # Адаптер базы данных пользователей FastAPI обеспечивает связь между конфигурацией вашей базы данных и
 # логикой пользователей. Он должен быть сгенерирован зависимостью FastAPI.
 # https://fastapi-users.github.io/fastapi-users/12.1/configuration/databases/sqlalchemy/
-
-
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
     async with async_session_maker() as session:
         yield session
