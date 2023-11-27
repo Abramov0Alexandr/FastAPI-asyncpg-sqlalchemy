@@ -1,9 +1,12 @@
+from typing import Annotated
 from typing import List
 
 from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import HTTPException
 from fastapi import status
+from fastapi.security import OAuth2PasswordRequestForm
+from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_async_session
@@ -17,7 +20,6 @@ from app.orm.user import show_users
 from app.schemas.user import GetUser
 from app.schemas.user import TokenResponse
 from app.schemas.user import UserCreate
-from app.schemas.user import UserLogin
 from app.service.auth import create_access_token
 from app.service.hashing import Hasher
 
@@ -54,6 +56,7 @@ async def create_user(user: UserCreate, db: AsyncSession = Depends(get_async_ses
     status_code=status.HTTP_200_OK,
     description="Список зарегистрированных пользователей",
 )
+@cache(expire=50, namespace="user_list")
 async def get_users(db: AsyncSession = Depends(get_async_session)):
     """
     Маршрут для получения списка зарегистрированных пользователей.
@@ -67,25 +70,26 @@ async def get_users(db: AsyncSession = Depends(get_async_session)):
     "/token/", status_code=status.HTTP_200_OK, response_model=TokenResponse
 )
 async def login_for_access_token(
-    user: UserLogin, db: AsyncSession = Depends(get_async_session)
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    db: AsyncSession = Depends(get_async_session),
 ):
 
     """
     Endpoint для получения токена доступа (JWT) при аутентификации пользователя.
 
     Args:
-        user (UserLogin): Модель аутентификации пользователя.
         db (AsyncSession): Сессия базы данных.
+        form_data (OAuth2PasswordRequestForm): Форма для указания данных пользователя при аутентификации.
 
     Returns:
         Dict[str, str]: Токен доступа и тип токена.
     """
 
-    _user = await get_user_by_username(username=user.username, db=db)
+    _user = await get_user_by_username(username=form_data.username, db=db)
     if not _user:
         raise UserInstanceException
 
-    if not Hasher.verify_password(user.password, _user.password):
+    if not Hasher.verify_password(form_data.password, _user.password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Проверьте правильность указанного пароля",
