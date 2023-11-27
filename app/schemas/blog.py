@@ -14,7 +14,7 @@ class BlogCreate(BaseModel):
 
     title: str = Field(..., min_length=3, max_length=30)
     slug: Optional[str] = None
-    content: Optional[str] = None
+    content: str = Field(...)
 
     @model_validator(mode="before")
     def generate_slug(cls, values):
@@ -33,9 +33,9 @@ class ShowBlog(BaseModel):
     """
 
     id: int
-    title: str = Field(..., min_length=3, max_length=30)
-    slug: Optional[str] = None
-    content: Optional[str]
+    title: str
+    slug: str
+    content: str
     created_at: datetime
 
     class ConfigDict:
