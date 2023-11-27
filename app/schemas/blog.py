@@ -47,4 +47,4 @@ class UpdateBlog(BlogCreate):
     Схема модели Blog, используется при редактировании.
     """
 
-    pass
+    content: Optional[str] = None
