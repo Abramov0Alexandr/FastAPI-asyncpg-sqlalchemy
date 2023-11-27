@@ -26,7 +26,7 @@ api_router = APIRouter(prefix="/api", tags=["blog"])
     description="Создание новой публикации для блога",
 )
 async def create_blog(
-    creation_blog_schema: BlogCreate = Depends(),
+    creation_blog_schema: BlogCreate,
     db: AsyncSession = Depends(get_async_session),
     current_user: User = Depends(get_current_user),
 ):
