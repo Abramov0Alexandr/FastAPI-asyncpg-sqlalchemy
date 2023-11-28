@@ -37,7 +37,7 @@
 
 Клонируйте репозиторий с помощью следующей команды:
    ```bash
-   git git@github.com:Abramov0Alexandr/FastAPI-asyncpg-sqlalchemy.git
+   git clone git@github.com:Abramov0Alexandr/FastAPI-asyncpg-sqlalchemy.git
    ```
 
 Перейдите в директорию проекта:
