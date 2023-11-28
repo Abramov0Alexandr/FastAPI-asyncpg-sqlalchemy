@@ -1,4 +1,5 @@
 from typing import List
+from typing import TYPE_CHECKING
 
 from pydantic import EmailStr
 from sqlalchemy import Boolean
@@ -8,8 +9,11 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 
-from app.models import blog
 from app.models.base_class import Base
+
+
+if TYPE_CHECKING:
+    from .blog import Blog
 
 
 class User(Base):
@@ -21,4 +25,4 @@ class User(Base):
     password: Mapped[str] = mapped_column(String, nullable=False)
     is_superuser: Mapped[bool] = mapped_column(Boolean, default=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    blogs: Mapped[List["blog.Blog"]] = relationship("Blog", back_populates="author")
+    blogs: Mapped[List["Blog"]] = relationship("Blog", back_populates="author")
