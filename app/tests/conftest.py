@@ -6,7 +6,6 @@ from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import async_sessionmaker
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.ext.asyncio import create_async_engine
-from starlette.testclient import TestClient
 
 from app.config import test_db_settings
 from app.database import get_async_session
@@ -55,9 +54,6 @@ def event_loop():
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
     loop.close()
-
-
-sync_client = TestClient(app)
 
 
 @pytest.fixture(scope="session")

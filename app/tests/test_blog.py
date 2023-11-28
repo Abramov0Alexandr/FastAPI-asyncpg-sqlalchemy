@@ -38,7 +38,7 @@ async def test_create_blog(
     assert new_user.status_code == status_code
 
     # Create token for new test user
-    get_new_user_token = await async_client.post("/api/token/", json=user_auth)
+    get_new_user_token = await async_client.post("/api/token/", data=user_auth)
     assert get_new_user_token.status_code == status.HTTP_200_OK
     user_token = get_new_user_token.json()["access_token"]
 
@@ -128,7 +128,7 @@ async def test_update_blog(
     TestCase для проверки маршрута обновления объекта модели Blog.
     """
 
-    get_user_token = await async_client.post("/api/token/", json=user_auth)
+    get_user_token = await async_client.post("/api/token/", data=user_auth)
     user_token = get_user_token.json()["access_token"]
 
     response = await async_client.put(
