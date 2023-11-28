@@ -14,20 +14,29 @@ project_settings = {
 
 
 # Settings for database connection
+class ProdDBSettings:
+    """
+    Класс, содержащий основные настройки для подключения к рабочей базе данных.
+    """
 
-DB_USER: str = os.getenv("DB_USER")
-DB_PASSWORD: str = os.getenv("DB_PASSWORD")
-DB_HOST: str = os.getenv("DB_HOST")
-DB_PORT: str = os.getenv("DB_PORT", 5432)
-DB_NAME: str = os.getenv("DB_NAME")
-DATABASE_URL: str = (
-    f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-)
+    DB_USER: str = os.getenv("DB_USER")
+    DB_PASSWORD: str = os.getenv("DB_PASSWORD")
+    DB_HOST: str = os.getenv("DB_HOST")
+    DB_PORT: str = os.getenv("DB_PORT", 5432)
+    DB_NAME: str = os.getenv("DB_NAME")
+    DATABASE_URL: str = (
+        f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    )
 
 
-JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY")
-TOKEN_LIFESPAN: int = int(os.getenv("TOKEN_LIFESPAN"))
-VERIFY_SIGNATURE: str = os.getenv("VERIFY_SIGNATURE")
+class JWTTokenSettings:
+    """
+    Класс, содержащий основные настройки для созданий JWT токена.
+    """
+
+    JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY")
+    TOKEN_LIFESPAN: int = int(os.getenv("TOKEN_LIFESPAN"))
+    VERIFY_SIGNATURE: str = os.getenv("VERIFY_SIGNATURE")
 
 
 class TestDBSettings:
@@ -45,4 +54,6 @@ class TestDBSettings:
     )
 
 
+prod_db_settings = ProdDBSettings()
+jwt_token_settings = JWTTokenSettings()
 test_db_settings = TestDBSettings()
